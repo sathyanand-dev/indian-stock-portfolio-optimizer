@@ -1,0 +1,19 @@
+{
+  "name": "Indian Stock Portfolio Optimizer",
+  "short_name": "Portfolio Optimizer",
+  "description": "Optimize an Indian stock portfolio, research companies and analyse IPOs.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FAFBFC",
+  "theme_color": "#2C3E50",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

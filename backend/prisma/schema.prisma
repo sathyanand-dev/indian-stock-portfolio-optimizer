@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int             @id @default(autoincrement())
+  email             String          @unique
+  username          String          @unique
+  hashedPassword    String?         @map("hashed_password")
+  fullName          String?         @map("full_name")
+  phone             String?
+  avatarUrl         String?         @map("avatar_url")
+  authProvider      String          @default("local") @map("auth_provider")
+  googleId          String?         @unique @map("google_id")
+  emailVerified     Boolean         @default(false) @map("email_verified")
+  isActive          Boolean         @default(true) @map("is_active")
+  riskTolerance     String          @default("moderate") @map("risk_tolerance")
+  investmentHorizon Int             @default(60) @map("investment_horizon")
+  createdAt         DateTime        @default(now()) @map("created_at")
+  updatedAt         DateTime?       @updatedAt @map("updated_at")
+  portfolios        Portfolio[]
+  preferences       UserPreference?
+  notifications     Notification[]
+
+  @@map("users")
+}
+
+model UserPreference {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique @map("user_id")
+
+  // Appearance
+  theme        String @default("light")
+  language     String @default("en")
+  dateFormat   String @default("dd/MM/yyyy") @map("date_format")
+  numberFormat String @default("indian") @map("number_format")
+  currency     String @default("INR")
+  density      String @default("comfortable")
+
+  // Notifications
+  emailNotifications Boolean @default(true) @map("email_notifications")
+  portfolioAlerts    Boolean @default(true) @map("portfolio_alerts")
+  marketNewsAlerts   Boolean @default(false) @map("market_news_alerts")
+  performanceReports Boolean @default(true) @map("performance_reports")
+  ipoAlerts          Boolean @default(true) @map("ipo_alerts")
+  digestFrequency    String  @default("weekly") @map("digest_frequency")
+
+  // Privacy
+  dataRetention  String  @default("2y") @map("data_retention")
+  analyticsOptIn Boolean @default(false) @map("analytics_opt_in")
+  betaFeatures   Boolean @default(false) @map("beta_features")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+model Notification {
+  id        Int       @id @default(autoincrement())
+  userId    Int       @map("user_id")
+  type      String    @default("system")
+  title     String
+  body      String?
+  link      String?
+  severity  String    @default("info")
+  isRead    Boolean   @default(false) @map("is_read")
+  emailSent Boolean   @default(false) @map("email_sent")
+  createdAt DateTime  @default(now()) @map("created_at")
+  readAt    DateTime? @map("read_at")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+  @@map("notifications")
+}
+
+model Portfolio {
+  id                 Int                @id @default(autoincrement())
+  name               String
+  description        String?
+  userId             Int                @map("user_id")
+  isActive           Boolean            @default(true) @map("is_active")
+  optimizationMethod String?            @map("optimization_method")
+  riskTolerance      String?            @map("risk_tolerance")
+  investmentAmount   Float?             @map("investment_amount")
+  expectedReturn     Float?             @map("expected_return")
+  expectedVolatility Float?             @map("expected_volatility")
+  sharpeRatio        Float?             @map("sharpe_ratio")
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime?          @updatedAt @map("updated_at")
+  owner              User               @relation(fields: [userId], references: [id])
+  holdings           PortfolioHolding[]
+
+  @@index([userId])
+  @@map("portfolios")
+}
+
+model PortfolioHolding {
+  id               Int       @id @default(autoincrement())
+  portfolioId      Int       @map("portfolio_id")
+  symbol           String
+  weight           Float
+  quantity         Float?
+  avgPurchasePrice Float?    @map("avg_purchase_price")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime? @updatedAt @map("updated_at")
+  portfolio        Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+
+  @@index([portfolioId])
+  @@map("portfolio_holdings")
+}

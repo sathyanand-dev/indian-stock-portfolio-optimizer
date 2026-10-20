@@ -1,0 +1,43 @@
+{
+  "name": "portfolio-optimizer-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Express + Prisma API for Indian Portfolio Optimizer",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
+    "db:import": "node src/scripts/importLegacyDb.js",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.10.1",
+    "bcryptjs": "^3.0.2",
+    "compression": "^1.8.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "google-auth-library": "^11.0.2",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "ml-matrix": "^6.12.1",
+    "morgan": "^1.10.0",
+    "nodemailer": "^10.0.0",
+    "portfolio-optimizer-new": "file:..",
+    "zod": "^3.25.67"
+  },
+  "devDependencies": {
+    "prisma": "^6.10.1",
+    "supertest": "^7.1.1",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,41 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+html {
+  /* Stop iOS Safari from inflating text in landscape. */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Inter', 'Roboto', 'Segoe UI', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Background colour comes from the MUI theme so dark mode applies. */
+  overscroll-behavior-y: none;
+}
+
+:focus-visible {
+  outline: 2px solid #3498db;
+  outline-offset: 2px;
+}
+
+a {
+  color: inherit;
+}
+
+/* Recharts sizes itself from the parent; without this it can force the page
+   wider than the viewport on phones. */
+.recharts-wrapper,
+.recharts-surface {
+  max-width: 100%;
+}
